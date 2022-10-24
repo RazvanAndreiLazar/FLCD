@@ -3,7 +3,7 @@ import re
 
 class HashTable():
     def __init__(self) -> None:
-        self.n = 1023
+        self.n = 509
         self.__buckets = [[] for _ in range(self.n)]
 
     def search(self, key):
