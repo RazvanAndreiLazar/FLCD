@@ -1,46 +1,64 @@
+from enum import Enum
+from LinkedList import LinkedList
 from SymbolTable import SymbolTable
 import re
 
+class TokenType (Enum):
+    IDENT = 0
+    CONST = 1
+    TOKEN = 2
 class Scanner:
+
     def __init__(self, file, tokens_file = "L1b/tokens.in"):
         self.__file = file
         self.__tokens_file = tokens_file
         self.__tokens = {}
 
+        self.__pif = LinkedList()
+        self.__identifier_st = SymbolTable()
+        self.__constant_st = SymbolTable()
+
     def set_file(self, file):
         self.__file = file
 
     def read_tokens(self):
+        self.__tokens['const'] = 0
+        self.__tokens['ident'] = 1
+
         f = open(self.__tokens_file, "r")
         for i, line in enumerate(f.readlines()):
-            self.__tokens[line.strip()] = i
+            self.__tokens[line.strip()] = i + 2
 
 
     def scan(self) -> tuple():
-        identifier_st = SymbolTable()
-        constant_st = SymbolTable()
+        self.__identifier_st = SymbolTable()
+        self.__constant_st = SymbolTable()
+        self.__pif = LinkedList()
 
         f = open(self.__file, "r")
 
-        for line in f.readlines():
-            self._parse_line(line, identifier_st, constant_st)
+        for line_no, line in enumerate(f.readlines()):
+            res = self._parse_line(line)
+            if res is not None:
+                return (False, (line_no, res))
 
         f.close()
 
-        return identifier_st, constant_st
+        return (True, (self.__pif, self.__identifier_st, self.__constant_st))
 
-    def _parse_line(self, line: str, identifier_st: SymbolTable, constant_st: SymbolTable):
+    def _parse_line(self, line: str):
         # split the line into words by space 
         words = line.split()
-
+        
         for word in words:
             # check if the word can be classified as an token, identifier or constant
-            if self.__process_word(word, identifier_st, constant_st):
+            if self.__process_word(word):
                 continue
             
             # if the entire word is not a token try to sepparate it into tokens character by character
             token = ''
-            for i in range(0, len(word)):
+            i = 0
+            while i < len(word):
                 c = word[i]
 
                 # if the character is part of the alphabet, but not a separator or operand add it to the token and go to the next one
@@ -49,37 +67,53 @@ class Scanner:
                 (c >= 'A' and c <= 'Z') or \
                 (c >= '0' and c <= '9'):
                     token += c
+                    i += 1
                     continue
 
                 # if the current character and the next one form an operator process the previous token and reset it
                 if i < len(word) - 1 and c + word[i+1] in self.__tokens:
-                    self.__process_word(token, identifier_st, constant_st)
+                    if token != '' and not self.__process_word(token):
+                        return token
+                    self.__add_to_pif(c + word[i+1], TokenType.TOKEN)
                     token = ''
+                    i += 2
                     continue
                 # if the current character is an operator or separator process the previous token and reset it
                 if c in self.__tokens:
-                    self.__process_word(token, identifier_st, constant_st)
+                    if token != '' and not self.__process_word(token):
+                        return token
+                    self.__add_to_pif(c, TokenType.TOKEN)
                     token = ''
+                    i += 1
                     continue
+                
+                print(c)
+                return c
 
             # process the last token in the line
-            if token != '': self.__process_word(token, identifier_st, constant_st)
+            if token != '' and not self.__process_word(token):
+                return token
 
-    def __process_word(self, word, identifier_st, constant_st):
-        # print(word)
+        return None
+
+    def __process_word(self, word):
         # if the word is a token put it into pif
         if word in self.__tokens.keys():
-            #TODO: put it into PIF
+            self.__add_to_pif(word, TokenType.TOKEN)
             return True
         # if the word is an identifier add it to the identifiers symbol table
         if self.__is_identifier(word):
-            if identifier_st.search(word) is None:
-                identifier_st.insert(word)
+            if self.__identifier_st.search(word) is None:
+                self.__identifier_st.insert(word)
+            
+            self.__add_to_pif(word, TokenType.IDENT)
             return True
         # if the word is a constant add it to the constants symbol table
         if self.__is_constant(word):
-            if constant_st.search(word) is None:
-                constant_st.insert(word)
+            if self.__constant_st.search(word) is None:
+                self.__constant_st.insert(word)
+            
+            self.__add_to_pif(word, TokenType.CONST)
             return True
 
         return False
@@ -97,15 +131,15 @@ class Scanner:
             (re.fullmatch(strregex, word) != None) | \
             (word == "true") | (word == "false")
 
+    def __add_to_pif(self, word, type: TokenType):
+        if type == TokenType.IDENT:
+            self.__pif.insert((word, (0, self.__identifier_st.search(word))))
+        if type == TokenType.CONST:
+            self.__pif.insert((word, (1, self.__constant_st.search(word))))
+        if type == TokenType.TOKEN:
+            self.__pif.insert((word, (self.__tokens[word], -1)))
 
+    def __check_for_string_constants(self, line: str):
+        tokens = line.split('"')
+        print(tokens)
 
-ist = SymbolTable()
-cst = SymbolTable()
-
-scn = Scanner('L1a/p1.txt')
-scn.read_tokens()
-identifier_st, constant_st = scn.scan()
-        
-print()
-print('IDENTIFIERS', identifier_st, sep='\n')
-print('CONSTANTS', constant_st, sep='\n')

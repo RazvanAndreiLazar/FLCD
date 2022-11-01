@@ -1,0 +1,32 @@
+Alphabet:
+a. Upper (A-Z) and lower case letters (a-z) of the English Alphabet
+b. Decimal digits (0-9)
+c. Underscore (_)
+
+Lexic:
+    operators: + - * / % < > <= = == >= && ||
+    separators: space < > { } ( ) " " ,
+    reserved words:
+        int string char bool array if while for READ PRINT BEGIN END STOP true false
+    
+    identifiers (< 256 chrs):
+        - sequence of maximum 256 characters, letters and digits or underscore (_), such that the first character is a letter or underscore(_)
+        identifier := {"_"}letter{letter | digit}
+        letter := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
+        digit := "0" | "1" | ... | "9"
+
+    constants: 
+        integer:
+            intconst := [+ | -]no
+            no := digit{no}
+
+        string:
+            strconst := """string"""
+            string := char{string}
+            chr := letter|digit| character  
+
+        character:
+            charconst := "'" chr "'"
+
+        boolean:
+            boolconst := "true" | "false"      

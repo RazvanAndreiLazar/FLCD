@@ -1,0 +1,11 @@
+int {a, b, c}
+
+READ a
+READ b
+
+c = a
+a = b
+b = c
+
+PRINT a
+PRINT b

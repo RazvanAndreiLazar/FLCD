@@ -1,0 +1,17 @@
+GitHub link: https://github.com/RazvanAndreiLazar/FLCD
+* works for non-space cases (a=2+1) 
+
+PIF (Program Internal Form):
+LinkedNode:
+    - value: value of the node
+    - next: LinkedNode / null
+
+LinkedList:
+    - head: LinkedNode / null
+    - tail: LinkedNode / null
+    
+    - insert(value): inserts the value as a new tail
+
+each token is inserted in pif while parsing the program
+value: pair(token, pair(token_id, id_from_symbol_table))
+        id_from_symbol_table is '-1' if the token is not a constant/identifier 

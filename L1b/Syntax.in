@@ -1,0 +1,30 @@
+OPERATOR := "+" | "-" | "*" | "/" | "%" | "&&" | "||"
+IDENTIFIER := {"_"}letter{letter | digit}
+letter := "a" | "b" | ... | "z" | "A" | "B" | ... | "Z"
+digit := "0" | "1" | ... | "9"
+
+expression := expression OPERATOR term | term
+term := "(" expression ")" | IDENTIFIER | CONSTANT
+
+RELATION := "<" | "<=" | "=" | "!=" | ">=" | ">"
+condition := expression RELATION expression
+
+ioStmt := ("READ" | "PRINT") expression
+assignStmt := IDENTIFIER "=" expression
+simplStmt := ioStmt | assignStmt
+
+ifStmt := "if" "(" condition ")" stmt ["else" stmt]
+whileStmt := "while" "(" condition ")" stmt
+
+structStmt := ifStmt | whileStmt | cmpdStmt
+stmt := structStmt | simplStmt | declaration
+stmtlist := stmt {"endline" stmt} 
+cmpdStmt := "BEGIN" stmtlist "END"
+
+primType := "int" | "string" | "bool" | "char"
+arrType := "array" "(" primType ")" "[" no "]"
+type := primType | arrType
+
+declaration := type "{" IDENTIFIER {","IDENTIFIER} "}"
+
+program := stmtlist
