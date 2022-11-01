@@ -22,11 +22,8 @@ Lexic:
 
         string:
             strconst := """string"""
-            string := char{string}
-            chr := letter|digit| character  
-
-        character:
-            charconst := "'" chr "'"
+            string := chr{string}
+            chr := letter|digit | ascii_char
 
         boolean:
             boolconst := "true" | "false"      

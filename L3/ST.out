@@ -1,10 +1,13 @@
 Symbol table representation: 2 Hash Tables, one for constant ST, one for identifier ST
 IDENTIFIERS:
-prod: 1
-n: 3
-x: 2
+a: 1
+b: 2
+i: 7
 
 CONSTANTS:
-0: 5
-1: 4
+"abcd": 3
+"abcdf": 4
+0: 6
+2: 5
+3: 8
 

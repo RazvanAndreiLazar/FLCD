@@ -1,4 +1,5 @@
 from enum import Enum
+import string
 from LinkedList import LinkedList
 from SymbolTable import SymbolTable
 import re
@@ -47,15 +48,32 @@ class Scanner:
         return (True, (self.__pif, self.__identifier_st, self.__constant_st))
 
     def _parse_line(self, line: str):
-        # split the line into words by space 
-        words = line.split()
+        # separate string constants from the rest of the parse
+        res, string_sepp = self.__separate_from_strings(line)
+
+        if not res: return string_sepp
+
+        for i, elem in enumerate(string_sepp):
+            if (i % 2 == 0):
+                res = self.__parse_elem(elem) 
+                if res is not None:
+                    return res
+            else: 
+                self.__process_word('"' + elem + '"')
         
+        return None
+
+
+    def __parse_elem(self, elem):
+        # split the line into words by space 
+        words = elem.split()
+
         for word in words:
             # check if the word can be classified as an token, identifier or constant
             if self.__process_word(word):
                 continue
             
-            # if the entire word is not a token try to sepparate it into tokens character by character
+            # if the entire word is not a token try to separate it into tokens character by character
             token = ''
             i = 0
             while i < len(word):
@@ -139,7 +157,11 @@ class Scanner:
         if type == TokenType.TOKEN:
             self.__pif.insert((word, (self.__tokens[word], -1)))
 
-    def __check_for_string_constants(self, line: str):
+    def __separate_from_strings(self, line: str):
         tokens = line.split('"')
-        print(tokens)
+
+        if (len(tokens) % 2 == 0):
+            return False, tokens[-1]
+        
+        return True, tokens
 
