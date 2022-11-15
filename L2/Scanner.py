@@ -1,5 +1,6 @@
 from enum import Enum
 import string
+from L4.FiniteAutomata import FiniteAutomata
 from LinkedList import LinkedList
 from SymbolTable import SymbolTable
 import re
@@ -10,7 +11,7 @@ class TokenType (Enum):
     TOKEN = 2
 class Scanner:
 
-    def __init__(self, file, tokens_file = "L1b/tokens.in"):
+    def __init__(self, file, tokens_file = "../L1b/tokens.in"):
         self.__file = file
         self.__tokens_file = tokens_file
         self.__tokens = {}
@@ -18,6 +19,11 @@ class Scanner:
         self.__pif = LinkedList()
         self.__identifier_st = SymbolTable()
         self.__constant_st = SymbolTable()
+
+        self.__identifier_fa = FiniteAutomata()
+        self.__identifier_fa.readFA('../L4/IdentifiersFA.in')
+        self.__int_const_fa = FiniteAutomata()
+        self.__int_const_fa.readFA('../L4/IntConstFA.in')
 
     def set_file(self, file):
         self.__file = file

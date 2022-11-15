@@ -2,21 +2,31 @@
 from Scanner import Scanner
 
 def logPIF(pif):
-    f = open('L3/PIF.out', 'w')
-    f.write(str(pif))
+    try:
+        f = open('L3/PIF.out', 'w')
+    except FileNotFoundError:
+        f = open('../L3/PIF.out', 'w')
+    finally:
+        f.write(str(pif))
+        f.close()
+
 
 def logST(id_st, cst_st):
-    f = open('L3/ST.out', 'w')
-    f.write('Symbol table representation: 2 Hash Tables, one for constant ST, one for identifier ST\n')
-    f.write('IDENTIFIERS:\n' + str(id_st) + '\n')
-    f.write('CONSTANTS:\n' + str(cst_st) + '\n')
+    try:
+        f = open('L3/ST.out', 'w')
+    except FileNotFoundError:
+        f = open('../L3/ST.out', 'w')
+    finally:
+        f.write('Symbol table representation: 2 Hash Tables, one for constant ST, one for identifier ST\n')
+        f.write('IDENTIFIERS:\n' + str(id_st) + '\n')
+        f.write('CONSTANTS:\n' + str(cst_st) + '\n')
 
 
 
 print("Filename: ", end='')
 filename = input()
 
-scn = Scanner('L1a/p1.txt' if filename.strip() == '' else filename)
+scn = Scanner('../L1a/p1.txt' if filename.strip() == '' else filename)
 scn.read_tokens()
 flag, res = scn.scan()
 

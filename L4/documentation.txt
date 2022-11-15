@@ -1,0 +1,37 @@
+GitHub link: https://github.com/RazvanAndreiLazar/FLCD
+* FAs for identifiers and int constants are used 
+
+FiniteAutomata:
+    Properties:
+        - alphabet
+        - states
+        - final_states
+        - initial_state
+        - transitions
+
+    Methods:
+        - readFA(filename): read the input file defining the FA's structure (the file must respect the EBNF structure) 
+        - verify(token): verifies if the token respects the FA
+            start from the initial state
+            read letter by letter and check for the pair of (current state, letter) in the transition dictionary
+            update the current state if the pair exists
+                return false otherwise
+            after reading all the letters check if the current state is a final state and return result
+
+
+EBNF Finite Automata files:
+FA := STATES "\n" ALPHABET "\n" INITIAL_STATE "\n" FINAL_STATES "\n" TRANSITIONS
+
+STATES := "STATES:" STATE{"|" STATE}
+STATE = letter{letter}
+letter = "a" | "b" | ... | "z"
+
+ALPHABET := "ALPHABET:" ELEMENT{"|" ELEMENT}
+ELEMENT := any ASCII character
+
+INITIAL_STATE := "INITIAL_STATE" STATE
+
+FINAL_STATES := "FINAL_STATES" STATE{"|" STATE}
+
+TRANSITIONS := TRANSITION {"|" TRANSITION}
+TRANSITION := STATE " + " ELEMENT " -> " STATE

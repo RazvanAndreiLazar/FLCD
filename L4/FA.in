@@ -1,0 +1,5 @@
+STATES:s|p|q
+ALPHABET:a|b|c|"
+INITIAL_STATE:s
+FINAL_STATES:q
+TRANSITIONS:s + " -> p|p + a -> p|p + b -> p|p + c -> p|p + " -> q
