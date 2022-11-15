@@ -150,8 +150,8 @@ class Scanner:
         intregex = '[+-]?[0-9]+'         # regex for int constants in the programming language
         charregex = "'.'"                # regex for char constants in the programming language
         strregex = '".*"'                # regex for string constants in the programming language
-        return (re.fullmatch(intregex, word) != None) | \
-            (re.fullmatch(charregex, word) != None) | \
+        return (self.__int_const_fa.verify(word)) | \
+            (self.__int_const_fa.verify(word)) | \
             (re.fullmatch(strregex, word) != None) | \
             (word == "true") | (word == "false")
 

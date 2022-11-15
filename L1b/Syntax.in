@@ -13,8 +13,8 @@ ioStmt := ("READ" | "PRINT") expression
 assignStmt := IDENTIFIER "=" expression
 simplStmt := ioStmt | assignStmt
 
-ifStmt := "if" "(" condition ")" stmt ["else" stmt]
-whileStmt := "while" "(" condition ")" stmt
+ifStmt := "if" "(" condition ")" stmtlist ["else" stmtlist]
+whileStmt := "while" "(" condition ")" stmtlist
 
 structStmt := ifStmt | whileStmt | cmpdStmt
 stmt := structStmt | simplStmt | declaration
