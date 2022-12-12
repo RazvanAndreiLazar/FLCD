@@ -4,6 +4,7 @@ from grammar import Grammar, Production
 from parising_table import ParsingTable, Action
 from state import State
 
+from parsing_output import ParsingOutput
 
 class Parser:
     def __init__(self, _grammar):
@@ -131,10 +132,16 @@ class Parser:
 if __name__ == '__main__':
 
     grammar_in = Grammar()
-    filename = 'L5/g3.txt'
+    filename = 'L5/g2.txt'
     grammar_in.read(filename)
 
     parser = Parser(grammar_in)
     parser.construct_parsing_table()
     s = 'acc'
-    print(f'PARSING {s}... output = {list(map(str, parser.parse(s)))}')
+
+    parsing_output = parser.parse(s)
+    print(f'PARSING {s}... output = {list(map(str, parsing_output))}')
+
+    po = ParsingOutput()
+    po.process_parser_output(parsing_output)
+    print(list(map(str, po.bf_parse())))

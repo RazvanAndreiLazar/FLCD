@@ -33,14 +33,14 @@ class ParsingTable:
                 red_no = self.__productions_numbering.index(state.prod)
 
                 if action == Action.SHIFT:
-                    raise Exception('Shift - Reduction Conflict: the grammar is not an LR(0) grammar')
+                    raise Exception(f'Shift - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
                 if action == Action.REDUCE and reduction_no != red_no:
-                    raise Exception('Reduction - Reduction Conflict: the grammar is not an LR(0) grammar')
+                    raise Exception(f'Reduction - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
                 action = Action.REDUCE
                 reduction_no = red_no
             else:
                 if action == Action.REDUCE:
-                    raise Exception('Shift - Reduction Conflict: the grammar is not an LR(0) grammar')
+                    raise Exception(f'Shift - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
                 action = Action.SHIFT
             
         self.table.append({'action': action, 'reduction': reduction_no, 'goto': goto_destinations})
