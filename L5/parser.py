@@ -1,7 +1,7 @@
 from typing import Optional
 
 from grammar import Grammar, Production
-from parising_table import ParsingTable, Action
+from parsing_table import ParsingTable, Action
 from state import State
 
 from parsing_output import ParsingOutput
@@ -132,16 +132,17 @@ class Parser:
 if __name__ == '__main__':
 
     grammar_in = Grammar()
-    filename = 'L5/g2.txt'
+    filename = 'L5/g1.txt'
     grammar_in.read(filename)
 
     parser = Parser(grammar_in)
     parser.construct_parsing_table()
-    s = 'acc'
+    s = 'accbc'
 
     parsing_output = parser.parse(s)
     print(f'PARSING {s}... output = {list(map(str, parsing_output))}')
 
     po = ParsingOutput()
     po.process_parser_output(parsing_output)
-    print(list(map(str, po.bf_parse())))
+    print('Parsing output:', po, sep='\n')
+    po.print_to_file('L5/g1_out.txt')
