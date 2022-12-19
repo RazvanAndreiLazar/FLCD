@@ -1,4 +1,5 @@
 from typing import Optional
+from pif_reader import PifReader
 
 from grammar import Grammar, Production
 from parsing_table import ParsingTable, Action
@@ -126,7 +127,10 @@ class Parser:
                 print_current_state()
                 print('Accepting...')
                 output_stack.reverse()
-                return output_stack
+
+                po = ParsingOutput()
+                po.process_parser_output(output_stack)
+                return po
 
 
 if __name__ == '__main__':
@@ -137,12 +141,14 @@ if __name__ == '__main__':
 
     parser = Parser(grammar_in)
     parser.construct_parsing_table()
-    s = 'accbc'
+    s = ['a','c','c','b','c']
 
-    parsing_output = parser.parse(s)
-    print(f'PARSING {s}... output = {list(map(str, parsing_output))}')
-
-    po = ParsingOutput()
-    po.process_parser_output(parsing_output)
+    po = parser.parse(s)
     print('Parsing output:', po, sep='\n')
     po.print_to_file('L5/g1_out.txt')
+
+    # pr = PifReader()
+    # pr.readPIF('L3/PIF.out')
+    # print(pr.get_keys())
+
+

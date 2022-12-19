@@ -12,7 +12,7 @@ class Action(Enum):
 
 class ParsingTable:
     def __init__(self, grammar: Grammar) -> None:
-        self.table = []  # item structure: action: Action, goto: {symbol: stateNo}
+        self.table = []  # item structure: action: Action, reduction: production_no, goto: {symbol: stateNo}
         self.__grammar: Grammar = grammar
 
         self.__start_production = Production("S'", self.__grammar.initial)
