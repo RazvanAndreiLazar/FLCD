@@ -3,18 +3,20 @@ OPERATOR expression term RELATION condition ioStmt assignStmt simplStmt ifStmt w
 program
 OPERATOR -> + | - | * | / | %
 RELATION -> < | <= | != | >= | > | == | &&
-expression -> IDENT | CONST | true | false
+expression -> IDENT | CONST | true | false | IDENT OPERATOR IDENT | IDENT OPERATOR CONST | CONST OPERATOR IDENT | CONST OPERATOR CONST
 condition -> expression RELATION expression
 ioStmt -> READ expression | PRINT expression
 assignStmt -> IDENT = expression
 simplStmt -> ioStmt | assignStmt
-ifStmt -> if ( condition ) endline stmtlist | if ( condition ) endline stmtlist else stmtlist
-structStmt -> ifStmt | cmpdStmt
+ifStmt -> if ( condition ) endline cmpdStmt | if ( condition ) endline cmpdStmt else endline cmpdStmt
+whileStmt -> while ( condition ) endline cmpdStmt
+structStmt -> ifStmt | cmpdStmt | whileStmt
 stmt -> structStmt | simplStmt | STOP | declaration
-stmtlist -> stmt | stmtlist endline stmt | stmtlist stmt
+stmtlist -> stmt | stmtlist endline stmt
 cmpdStmt -> BEGIN endline stmtlist endline END
-program -> stmtlist | stmtlist endline
+program -> cmpdStmt | cmpdStmt endline
 type -> primType
 primType -> int | string | bool | char
+arrType -> array ( primType ) [ CONST ]
 declaration_list -> IDENT | declaration_list , IDENT
 declaration -> type { declaration_list }

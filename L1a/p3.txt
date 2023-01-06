@@ -1,14 +1,12 @@
+BEGIN
 int {prod, x, n}
-
 prod = 1
-
 READ n
-
 while (n > 0)
 BEGIN
     READ x
     prod = prod * x
     n = n - 1
 END
-
 PRINT prod
+END

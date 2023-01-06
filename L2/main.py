@@ -24,9 +24,9 @@ def logST(id_st, cst_st):
 
 
 print("Filename: ", end='')
-filename = input()
+filename = ''
 
-scn = Scanner('../L1a/p3.txt' if filename.strip() == '' else filename)
+scn = Scanner('../L1a/p1.txt' if filename.strip() == '' else filename)
 scn.read_tokens()
 flag, res = scn.scan()
 
