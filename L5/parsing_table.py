@@ -29,20 +29,21 @@ class ParsingTable:
             return
 
         for state in states_set:
-            if state.string_after_point == '':
+            if state.string_after_point == '':  # insert reduction
                 red_no = self.__productions_numbering.index(state.prod)
 
                 if action == Action.SHIFT:
-                    raise Exception(f'Shift - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
+                    raise Exception(
+                        f'Shift - Reduction Conflict (Set_no:{len(self.table)} - State: {state}, GOTO: ): the grammar is not an LR(0) grammar')
                 if action == Action.REDUCE and reduction_no != red_no:
-                    raise Exception(f'Reduction - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
+                    print(reduction_no, red_no)
+                    raise Exception(
+                        f'Reduction - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
                 action = Action.REDUCE
                 reduction_no = red_no
             else:
-                if action == Action.REDUCE:
-                    raise Exception(f'Shift - Reduction Conflict (Set_no:{len(self.table)} - State: {state}): the grammar is not an LR(0) grammar')
                 action = Action.SHIFT
-            
+
         self.table.append({'action': action, 'reduction': reduction_no, 'goto': goto_destinations})
 
     def process_canonical_collection(self, canonical_collection, goto_destinations):
@@ -69,4 +70,3 @@ class ParsingTable:
         for i, x in enumerate(self.table):
             s += f"Nr: {i}\t|\taction: {x['action']} {x['reduction'] if x['reduction'] is not None else ''}\t|\t{x['goto']}\n"
         return s
-        

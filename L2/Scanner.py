@@ -66,6 +66,8 @@ class Scanner:
                     return res
             else: 
                 self.__process_word('"' + elem + '"')
+
+        self.__process_word('endline')
         
         return None
 

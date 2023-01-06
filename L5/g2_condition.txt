@@ -10,11 +10,7 @@ assignStmt -> IDENT = expression
 simplStmt -> ioStmt | assignStmt
 ifStmt -> if ( condition ) endline stmtlist | if ( condition ) endline stmtlist else stmtlist
 structStmt -> ifStmt | cmpdStmt
-stmt -> structStmt | simplStmt | STOP | declaration
+stmt -> structStmt | simplStmt | STOP
 stmtlist -> stmt | stmtlist endline stmt | stmtlist stmt
 cmpdStmt -> BEGIN endline stmtlist endline END
 program -> stmtlist | stmtlist endline
-type -> primType
-primType -> int | string | bool | char
-declaration_list -> IDENT | declaration_list , IDENT
-declaration -> type { declaration_list }
