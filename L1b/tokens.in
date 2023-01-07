@@ -23,13 +23,12 @@
 " 
 ,
 int 
-string 
-char 
+string
 bool 
 array 
-if 
-while 
-for 
+if
+else
+while
 READ 
 PRINT 
 BEGIN 
