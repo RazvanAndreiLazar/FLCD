@@ -1,0 +1,70 @@
+%{
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <y.tab.h>
+
+int lines = 0;
+%}
+
+%option noyywrap
+%option caseless
+
+DIGIT [0-9]
+NON_ZERO_DIGIT [1-9]
+INT_CONSTANT [+-]?{NON_ZERO_DIGIT}{DIGIT}*|0
+LETTER [a-zA-Z_]
+STRING_CONSTANT \".*\"
+BOOL_CONSTANT true|false
+IDENTIFIER {LETTER}({LETTER}|{DIGIT})*
+
+%%
+
+"int" { printf("Scanner: INT\n"); return INT; }
+"string" { printf("Scanner: STRING\n"); return STRING; }
+"bool" { printf("Scanner: BOOL\n"); return BOOL; }
+"array" { printf("Scanner: ARRAY\n"); return ARRAY; }
+"if" { printf("Scanner: IF\n"); return IF; }
+"else" { printf("Scanner: ELSE\n"); return ELSE; }
+"while" { printf("Scanner: WHILE\n"); return WHILE; }
+"READ" { printf("Scanner: READ\n"); return READ; }
+"PRINT" { printf("Scanner: PRINT\n"); return PRINT; }
+"BEGIN" { printf("Scanner: BEG\n"); return BEG; }
+"END" { printf("Scanner: END\n"); return END; }
+"STOP" { printf("Scanner: STOP\n"); return STOP; }
+
+{INT_CONSTANT} | {STRING_CONSTANT} | {BOOL_CONSTANT} { printf("Scanner: CONST\n"); return CONST; }
+
+{IDENTIFIER} { printf("Scanner: IDENT\n"); return IDENT; }
+
+"+" { return PLUS; }
+"-" { return MINUS; }
+"*" { return MULTIPLY; }
+"/" { return DIVIDE; }
+"%" { return MOD; }
+"<" { return LESS; }
+">" { return GREATER; }
+"=" { return ASSIGN; }
+"<=" { return LESSEQ; }
+">=" { return GREATEREQ; }
+"==" { return EQ; }
+"!=" { return DIFF; }
+"&&" { return AND; }
+"||" { return OR; }
+
+"(" { return BROPEN; }
+")" { return BRCLOSE; }
+"{" { return SQOPEN; }
+"}" { return SQCLOSE; }
+"," { return COMMA; }
+"[" { return SBROPEN; }
+"]" { return SBCLOSE; }
+"\""  { return QUOTE; }
+
+[ \t]+ {}
+
+[\n]+ { ++lines; return ENDLINE; }
+
+. {printf("Error at token [%s] at line %d\n", yytext, lines); return -1; }
+
+%%
